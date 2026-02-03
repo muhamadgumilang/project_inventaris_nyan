@@ -80,14 +80,24 @@
                 <div data-i18n="Account Settings">Product Management</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="pages-account-settings-account.html" class="menu-link">
-                        <div data-i18n="Account">Category</div>
+                 <li class="menu-item">
+                    <a href="barang" class="menu-link">
+                        <div data-i18n="Barang">Barang</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
-                        <div data-i18n="Notifications">Product</div>
+                    <a href="kategori" class="menu-link">
+                        <div data-i18n="Category">Category</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="lokasi" class="menu-link">
+                        <div data-i18n="Lokasi">Lokasi</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="peminjaman" class="menu-link">
+                        <div data-i18n="Peminjaman">Peminjaman</div>
                     </a>
                 </li>
             </ul>

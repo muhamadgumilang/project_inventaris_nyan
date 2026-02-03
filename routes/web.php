@@ -24,4 +24,5 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
 //routes/web nya
 Route::resource('kategori', App\Http\Controllers\KategoriController::class);
 Route::resource('barang', App\Http\Controllers\BarangController::class);
+Route::resource('lokasi', App\Http\Controllers\LokasiController::class);
 Route::resource('peminjaman', App\Http\Controllers\PeminjamanController::class);
