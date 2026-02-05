@@ -22,7 +22,7 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
-                        <input type="text" name="nama" class="form-control" value="{{ old('nama', $lokasi->nama) }}"
+                        <input type="text" name="nama_lokasi" class="form-control" value="{{ old('nama', $lokasi->nama_lokasi) }}"
                             required>
                     </div>
                     <div class="mb-3">

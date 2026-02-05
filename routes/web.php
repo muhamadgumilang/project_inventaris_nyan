@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PeminjamanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -19,10 +20,20 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
     Route::get('/', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('index');
     Route::resource('users', App\Http\Controllers\Dashboard\UserController::class);
 });
+// routes/web.php
+Route::middleware('auth')->group(function () {
+    Route::resource('kategori', App\Http\Controllers\KategoriController::class);
+    Route::resource('lokasi', App\Http\Controllers\LokasiController::class);
+    Route::resource('barang', App\Http\Controllers\BarangController::class);
+    Route::resource('peminjaman', App\Http\Controllers\PeminjamanController::class);
+    Route::post('peminjaman/{peminjaman}/kembalikan', [App\Http\Controllers\PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+});
 
 
-//routes/web nya
-Route::resource('kategori', App\Http\Controllers\KategoriController::class);
-Route::resource('barang', App\Http\Controllers\BarangController::class);
-Route::resource('lokasi', App\Http\Controllers\LokasiController::class);
-Route::resource('peminjaman', App\Http\Controllers\PeminjamanController::class);
+
+
+Route::get('/peminjaman/export/pdf', [PeminjamanController::class, 'exportPdf'])
+    ->name('peminjaman.export.pdf');
+
+Route::get('/peminjaman/export/excel', [PeminjamanController::class, 'exportExcel'])
+    ->name('peminjaman.export.excel');

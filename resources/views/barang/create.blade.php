@@ -79,18 +79,19 @@
                             <input type="text" name="satuan" class="form-control" value="{{ old('satuan') }}" required>
                         </div>
                     </div>
-
-                    <div class="mb-3">
+                    
+                    <div class=" mb-3">
                         <label class="form-label">Tanggal Beli</label>
                         <input type="date" name="tanggal_beli" class="form-control" value="{{ old('tanggal_beli') }}">
                     </div>
-
-                    <div class="mb-3">
+                    
+                    <div class="row">
+                    <div class=" mb-3">
                         <label class="form-label">Harga</label>
                         <input type="number" step="0.01" name="harga" class="form-control" value="{{ old('harga') }}">
                     </div>
-
-                    <div class="mb-3">
+                    </div>
+                    <div class=" mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control" rows="3">{{ old('deskripsi') }}</textarea>
                     </div>

@@ -63,17 +63,21 @@
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
+        
+        
 
         <!-- Layouts -->
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pages</span>
         </li>
-        <li class="menu-item {{ request()->routeIs('dashboard.users.*') ? 'active' : '' }}">
-            <a href="{{ route('dashboard.users.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Analytics">Users Management</div>
-            </a>
-        </li>
+        @if (Auth::user() && Auth::user()->role === 'admin')
+            <li class="menu-item {{ request()->routeIs('dashboard.users.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.users.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div data-i18n="Analytics">Users Management</div>
+                </a>
+            </li>
+        @endif
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
@@ -81,22 +85,22 @@
             </a>
             <ul class="menu-sub">
                  <li class="menu-item">
-                    <a href="barang" class="menu-link">
+                    <a href="{{ route('barang.index') }}" class="menu-link">
                         <div data-i18n="Barang">Barang</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="kategori" class="menu-link">
+                    <a href="{{ route('kategori.index') }}" class="menu-link">
                         <div data-i18n="Category">Category</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="lokasi" class="menu-link">
+                    <a href="{{ route('lokasi.index') }}" class="menu-link">
                         <div data-i18n="Lokasi">Lokasi</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="peminjaman" class="menu-link">
+                    <a href="{{ route('peminjaman.index') }}" class="menu-link">
                         <div data-i18n="Peminjaman">Peminjaman</div>
                     </a>
                 </li>
