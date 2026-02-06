@@ -81,6 +81,14 @@
                 <a href="{{ route('peminjaman.create') }}" class="btn btn-primary">
                     <i class='bx bx-plus me-1'></i>Tambah Peminjaman
                 </a>
+                <div class="ms-2">
+                    <a href="{{ route('peminjaman.export.excel') }}" class="btn btn-success" target="_blank">
+                        <i class='bx bx-spreadsheet me-1'></i>Export Excel
+                    </a>
+                    <a href="{{ route('peminjaman.export.pdf') }}" class="btn btn-danger" target="_blank">
+                        <i class='bx bxs-file-pdf me-1'></i>Export PDF
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 @if(session('success'))
@@ -122,11 +130,11 @@
                             <tr>
                                 <th style="width: 50px">#</th>
                                 <th>Kode</th>
-                                <th>Peminjam</th>
+                                <th>Nama Peminjam</th>
                                 <th>Tanggal Pinjam</th>
                                 <th>Tanggal Kembali</th>
                                 <th>Status</th>
-                                <th>User</th>
+                                <th>Petugas</th>
                                 <th style="width: 150px">Aksi</th>
                             </tr>
                         </thead>

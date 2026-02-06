@@ -1,14 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PeminjamanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
 // inventaris
-Auth::routes(['register' => false]);
+Auth::routes();
 
 // tracking
 // Auth::routes();
@@ -25,15 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('kategori', App\Http\Controllers\KategoriController::class);
     Route::resource('lokasi', App\Http\Controllers\LokasiController::class);
     Route::resource('barang', App\Http\Controllers\BarangController::class);
+    Route::get('peminjaman/export/excel', [App\Http\Controllers\PeminjamanController::class, 'exportExcel'])->name('peminjaman.export.excel');
+    Route::get('peminjaman/export/pdf', [App\Http\Controllers\PeminjamanController::class, 'exportPdf'])->name('peminjaman.export.pdf');
     Route::resource('peminjaman', App\Http\Controllers\PeminjamanController::class);
     Route::post('peminjaman/{peminjaman}/kembalikan', [App\Http\Controllers\PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
 });
-
-
-
-
-Route::get('/peminjaman/export/pdf', [PeminjamanController::class, 'exportPdf'])
-    ->name('peminjaman.export.pdf');
-
-Route::get('/peminjaman/export/excel', [PeminjamanController::class, 'exportExcel'])
-    ->name('peminjaman.export.excel');

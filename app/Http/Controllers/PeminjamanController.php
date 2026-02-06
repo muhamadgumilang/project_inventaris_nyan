@@ -7,6 +7,9 @@ use App\Models\Barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PeminjamanExport;   
 
 class PeminjamanController extends Controller
 {
@@ -114,4 +117,19 @@ class PeminjamanController extends Controller
             return redirect()->back()->with('success', 'Semua barang berhasil dikembalikan dan stok telah diperbarui.');
         });
     }
+
+    public function exportExcel()
+    {
+        return Excel::download(new PeminjamanExport, 'laporan-peminjaman-' . now()->format('Y-m-d') . '.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $peminjaman = Peminjaman::with(['barang', 'user'])->latest()->get();
+        $pdf = Pdf::loadView('peminjaman.pdf', compact('peminjaman'));
+        return $pdf->download('laporan-peminjaman-' . now()->format('Y-m-d') . '.pdf');
+    }
+        
+   
+    
 }
