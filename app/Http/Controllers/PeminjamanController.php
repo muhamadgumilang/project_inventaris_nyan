@@ -28,52 +28,57 @@ class PeminjamanController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_peminjam'   => 'required',
-            'jenis_peminjam'  => 'required',
-            'tanggal_pinjam'  => 'required|date',
-            'barang_id'       => 'required|array',
-            'barang_id.*'     => 'required|exists:barangs,id',
-            'jumlah'          => 'required|array',
-            'jumlah.*'        => 'required|integer|min:1',
+{
+    $request->validate([
+        'nama_peminjam'   => 'required',
+        'jenis_peminjam'  => 'required',
+        'tanggal_pinjam'  => 'required|date',
+        'barang_id'       => 'required|array',
+        'barang_id.*'     => 'required|exists:barangs,id',
+        'jumlah'          => 'required|array',
+        'jumlah.*'        => 'required|integer|min:1',
+    ]);
+
+    return \DB::transaction(function () use ($request) {
+
+        // CEK STOK DULU
+        foreach ($request->barang_id as $i => $barangId) {
+            $barang = Barang::findOrFail($barangId);
+            $jumlahPinjam = $request->jumlah[$i];
+
+            if ($barang->jumlah < $jumlahPinjam) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', "Stok barang '{$barang->nama_barang}' tidak mencukupi (Tersedia: {$barang->jumlah})");
+            }
+        }
+
+        // BARU BUAT DATA PEMINJAMAN
+        $peminjaman = Peminjaman::create([
+            'kode_peminjaman' => 'PMJ-' . strtoupper(Str::random(6)),
+            'nama_peminjam'   => $request->nama_peminjam,
+            'jenis_peminjam'  => $request->jenis_peminjam,
+            'tanggal_pinjam'  => $request->tanggal_pinjam,
+            'status'          => 'dipinjam',
+            'user_id'         => Auth::id(),
         ]);
 
-        return \DB::transaction(function () use ($request) {
-            $peminjaman = Peminjaman::create([
-                'kode_peminjaman' => 'PMJ-' . strtoupper(Str::random(6)),
-                'nama_peminjam'   => $request->nama_peminjam,
-                'jenis_peminjam'  => $request->jenis_peminjam,
-                'tanggal_pinjam'  => $request->tanggal_pinjam,
-                'status'          => 'dipinjam',
-                'user_id'         => Auth::id(),
+        foreach ($request->barang_id as $i => $barangId) {
+            $barang = Barang::findOrFail($barangId);
+            $jumlahPinjam = $request->jumlah[$i];
+
+            $peminjaman->barang()->attach($barangId, [
+                'jumlah'          => $jumlahPinjam,
+                'kondisi_sebelum' => $barang->kondisi,
             ]);
 
-            foreach ($request->barang_id as $i => $barangId) {
-                $barang = Barang::findOrFail($barangId);
-                $jumlahPinjam = $request->jumlah[$i];
+            $barang->decrement('jumlah', $jumlahPinjam);
+        }
 
-                // Validasi stok cukup
-                if ($barang->jumlah < $jumlahPinjam) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', "Stok barang '{$barang->nama_barang}' tidak mencukupi (Tersedia: {$barang->jumlah})");
-                }
-
-                // Simpan detail peminjaman
-                $peminjaman->barang()->attach($barangId, [
-                    'jumlah'          => $jumlahPinjam,
-                    'kondisi_sebelum' => $barang->kondisi,
-                ]);
-
-                // Kurangi stok barang
-                $barang->decrement('jumlah', $jumlahPinjam);
-            }
-
-            return redirect()->route('peminjaman.index')
-                ->with('success', 'Peminjaman berhasil disimpan dan stok telah diperbarui');
-        });
-    }
+        return redirect()->route('peminjaman.index')
+            ->with('success', 'Peminjaman berhasil disimpan dan stok telah diperbarui');
+    });
+}
 
     public function show(Peminjaman $peminjaman)
     {
@@ -121,7 +126,7 @@ class PeminjamanController extends Controller
     public function exportExcel()
     {
         return Excel::download(new PeminjamanExport, 'laporan-peminjaman-' . now()->format('Y-m-d') . '.xlsx');
-    }
+    } 
 
     public function exportPdf()
     {
