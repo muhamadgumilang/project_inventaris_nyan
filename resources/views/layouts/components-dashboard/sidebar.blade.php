@@ -56,7 +56,7 @@
             color: rgba(255, 255, 255, 0.7) !important;
         }
     </style>
-
+        
     <div class="app-brand demo">
         <a href="index.html" class="app-brand-link">
             <span class="app-brand-logo demo">
